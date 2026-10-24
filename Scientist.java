@@ -16,8 +16,6 @@ public class Scientist extends CrewMember {
         super(Skills, FatigueLevel, HealthStatus, Name, id, availability, currentLocation);
     }
 
-   
-
     @Override
     public boolean canPerform(Mission m) {
         return false;
@@ -29,11 +27,8 @@ public class Scientist extends CrewMember {
     }
 
     @Override
-    public boolean isUsable() {
-        return false;
+    protected String getRole() {
+        return "Scientist";
     }
-    
-    
-    
-    
+
 }
