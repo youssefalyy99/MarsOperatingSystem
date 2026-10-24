@@ -22,7 +22,7 @@ public abstract class CrewMember extends Agent {
     public CrewMember(ArrayList<String> Skills, int FatigueLevel, int HealthStatus, String Name, int id, boolean availability, String currentLocation) {
         super(Name, id, availability, currentLocation);
         this.Skills = new ArrayList<>(Skills);      // copy 3shan lw had bara el code my2darsh yghyar 
-        this.FatigueLevel = clamp(FatigueLevel);    
+        this.FatigueLevel = clamp(FatigueLevel);
         this.HealthStatus = clamp(HealthStatus);
     }
 
@@ -92,4 +92,17 @@ public abstract class CrewMember extends Agent {
 
     @Override
     public abstract boolean canHandle(Emergency e);
+
+    protected abstract String getRole();
+
+    @Override
+    public String getStatusSummary() {
+        return getRole() + " | " + getName() + " (ID " + getId() + ")"
+                + " | Health: " + HealthStatus
+                + " | Fatigue: " + FatigueLevel
+                + " | Skills: " + Skills
+                + " | Location: " + getCurrentLocation()
+                + " | Available: " + isAvailable()
+                + " | Usable: " + isUsable();
+    }
 }
