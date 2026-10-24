@@ -56,4 +56,10 @@ public abstract class Agent {
         return availability && isUsable();
     }
 
+    public abstract String getStatusSummary();
+
+    public void display() {
+        System.out.println(getStatusSummary());
+    }
+
 }
