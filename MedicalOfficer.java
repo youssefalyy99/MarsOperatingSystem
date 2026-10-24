@@ -15,9 +15,8 @@ public class MedicalOfficer extends CrewMember {
     public MedicalOfficer(ArrayList<String> Skills, int FatigueLevel, int HealthStatus, String Name, int id, boolean availability, String currentLocation) {
         super(Skills, FatigueLevel, HealthStatus, Name, id, availability, currentLocation);
     }
-    
-    
-     @Override
+
+    @Override
     public boolean canPerform(Mission m) {
         return false;
     }
@@ -26,5 +25,10 @@ public class MedicalOfficer extends CrewMember {
     public boolean canHandle(Emergency e) {
         return false;
     }
-    
+
+    @Override
+    protected String getRole() {
+        return "Medical Officer";
+    }
+
 }
