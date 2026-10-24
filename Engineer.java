@@ -4,10 +4,30 @@
  */
 package lab5;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Mega Store
  */
-public class Engineer {
-    
+public class Engineer extends CrewMember {
+
+    public Engineer(ArrayList<String> Skills, int FatigueLevel, int HealthStatus, String Name, int id, boolean availability, String currentLocation) {
+        super(Skills, FatigueLevel, HealthStatus, Name, id, availability, currentLocation);
+    }
+
+    @Override
+    public boolean canPerform(Mission m) {
+        return false;
+    }
+
+    @Override
+    public boolean canHandle(Emergency e) {
+        return false;
+    }
+
+    @Override
+    protected String getRole() {
+        return "Engineer";
+    }
 }
