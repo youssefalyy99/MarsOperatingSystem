@@ -44,8 +44,11 @@ public abstract class CrewMember extends Agent {
     public String getHealthStatus() {
         return HealthStatus;
     }
-        
-    
-    
 
+    @Override
+    public abstract boolean canPerform(Mission m);
+
+    @Override
+    public abstract boolean canHandle(Emergency e);
+    
 }
