@@ -5,12 +5,29 @@
 package lab5;
 
 public abstract class Agent {
+
+    private String Name;
+    private final int id;
     private boolean availability;
     private String currentLocation;
 
-    public Agent(boolean availability, String currentLocation) {
+    public Agent(String Name, int id, boolean availability, String currentLocation) {
+        this.Name = Name;
+        this.id = id;
         this.availability = availability;
         this.currentLocation = currentLocation;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setName(String Name) {
+        this.Name = Name;
     }
 
     public boolean isAvailable() {
@@ -32,4 +49,11 @@ public abstract class Agent {
     public abstract boolean canPerform(Mission m);
 
     public abstract boolean canHandle(Emergency e);
+
+    public abstract boolean isUsable();
+
+    public boolean isReady() {
+        return availability && isUsable();
+    }
+
 }
