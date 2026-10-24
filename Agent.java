@@ -4,25 +4,32 @@
  */
 package lab5;
 
-/**
- *
- * @author Mega Store
- */
 public abstract class Agent {
-    private boolean Availability;
-    private String CurrentLocation;
+    private boolean availability;
+    private String currentLocation;
 
-    public Agent(boolean Availability, String CurrentLocation) {
-        this.Availability = Availability;
-        this.CurrentLocation = CurrentLocation;
+    public Agent(boolean availability, String currentLocation) {
+        this.availability = availability;
+        this.currentLocation = currentLocation;
     }
 
-    public boolean isAvailability() {
-        return Availability;
+    public boolean isAvailable() {
+        return availability;
     }
 
     public String getCurrentLocation() {
-        return CurrentLocation;
+        return currentLocation;
     }
-    
+
+    public void setAvailability(boolean availability) {
+        this.availability = availability;
+    }
+
+    public void setCurrentLocation(String currentLocation) {
+        this.currentLocation = currentLocation;
+    }
+
+    public abstract boolean canPerform(Mission m);
+
+    public abstract boolean canHandle(Emergency e);
 }
