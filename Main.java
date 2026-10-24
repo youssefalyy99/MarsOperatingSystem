@@ -1,4 +1,6 @@
-package Homework.Lab5HW;
+package lab5;
+
+import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
@@ -124,5 +126,23 @@ public class Main {
         System.out.println("\n========== RESOURCES AFTER SUCCESSFUL TRANSACTION ==========");
         resources.DisplayResources();
         System.out.println("\n========== TESTING COMPLETE ==========");
+        
+         ArrayList<String> skills = new ArrayList<>();
+        skills.add("Geology");
+
+        Scientist s = new Scientist(skills, 10, 100, "Sara", 1, true, "Lab A");
+        s.display();
+
+        s.damage(80);
+        System.out.println("After damage(80): health = " + s.getHealthStatus() + ", usable = " + s.isUsable());
+
+        s.heal(500);
+        System.out.println("After heal(500): health = " + s.getHealthStatus());
+
+        s.increaseFatigue(90);
+        System.out.println("After increaseFatigue(90): fatigue = " + s.getFatigueLevel() + ", usable = " + s.isUsable());
+
+        s.setAvailability(false);
+        System.out.println("Unavailable: ready = " + s.isReady());
     }
 }
