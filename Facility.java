@@ -4,7 +4,7 @@ public abstract class Facility {
     protected String id;
     protected String name;
     protected String status;
-    protected Resources R1 = new Resources();
+    public  Resources R1 = new Resources();
 
     Facility(String id, String name){
         this.id = id;
