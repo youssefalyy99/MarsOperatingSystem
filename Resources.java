@@ -165,12 +165,12 @@ public class Resources {
         }
 
         public void LeakOxygen(double amount){
-            this.oxygen = this.oxygen - amount;
+            this.oxygen = Math.max(0, this.oxygen - amount) ;
             System.out.println("System Message : <WARNING> OXYGEN LEAK BY " + amount + "UNITS . . . ");
         }
 
-        public void getOxygenLevel(){
+        public double getOxygenLevel(){
             System.out.println("System Message : Oxygen: " + this.oxygen + " Units  . . .");
-            return;
+            return this.oxygen;
         }
 }
