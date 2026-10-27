@@ -12,21 +12,29 @@ import java.util.List;
  * @author pc
  */
 public abstract class Robot extends Agent {
-   
+    public enum HealthStatus {
+    OPERATIONAL,
+    DAMAGED,
+    DESTROYED
+}
+   private static final int MAX_BATTERY = 100;
     private static final int RESERVE = 10;
+    private static final int IDLE_RECHARGE = 2;
     private int batteryLevel;
-    private String healthStatus;
+    private HealthStatus healthStatus;
     protected int batteryDrainPerUnit;
 
     public Robot(String name, int id, String currentLocation, int batteryDrainPerUnit) {
     super(name, id, true, currentLocation); 
-    this.batteryLevel = 100;
-    this.healthStatus = "Operational";
+    this.batteryLevel = MAX_BATTERY;
+    this.healthStatus = HealthStatus.OPERATIONAL;
     this.batteryDrainPerUnit = batteryDrainPerUnit; 
 }
 
     public void setBatteryLevel(int batteryLevel) {
-        if(batteryLevel<=100 && batteryLevel >=0)
+        if (batteryLevel < 0 || batteryLevel > MAX_BATTERY) {
+            throw new IllegalArgumentException("Battery must be between 0 and " + MAX_BATTERY);
+        }
         this.batteryLevel = batteryLevel;
     }
 
@@ -34,7 +42,7 @@ public abstract class Robot extends Agent {
         return batteryLevel;
     }
 
-    public String getHealthStatus() {
+    public HealthStatus getHealthStatus() {
         return healthStatus;
     }
     
@@ -48,34 +56,46 @@ public abstract class Robot extends Agent {
     if (amount <= 0) {
         return;
     }
-    batteryLevel = Math.min(100, batteryLevel + amount);
+    batteryLevel = Math.min(MAX_BATTERY, batteryLevel + amount);
 }
     
     public boolean hasEnoughBattery(int required) {
     return batteryLevel >= required + RESERVE;
 }
     public void damage(){
-        healthStatus="Damaged";
+        if (healthStatus == HealthStatus.OPERATIONAL) {
+            healthStatus = HealthStatus.DAMAGED;
+        }
                 }
     public void repair(){
-    healthStatus="Operational";
+    if (healthStatus == HealthStatus.DAMAGED) {
+            healthStatus = HealthStatus.OPERATIONAL;
+        }
     }
   public void tick() {
     if (!isAvailable()) {
         drainBattery(batteryDrainPerUnit);
     } else {
-        recharge(2);// charge a little
+        recharge(IDLE_RECHARGE); // charge a little
     }
 }
     @Override
-    public boolean isUsable(){}
+    public boolean isUsable(){
+        return healthStatus == HealthStatus.OPERATIONAL && batteryLevel > 0;
+    }
     @Override
-    public String getStatusSummary(){}
+    public String getStatusSummary(){
+    String summary = getName() + " (ID " + getId() + ")"+ " | Location: " + getCurrentLocation()+ " | Battery: " + batteryLevel + "/" + MAX_BATTERY + " | Health: " + healthStatus;
+        if (batteryLevel < 20) {
+            summary += " | LOW BATTERY";
+        }
+        return summary;
+    }
     @Override
     public void display() {
         System.out.println(getStatusSummary());
     }
-    public boolean canOperateIn(Environment e){
+    public boolean canOperateIn(Environment env){
     
     }
     @Override
