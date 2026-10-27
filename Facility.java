@@ -1,5 +1,13 @@
-package Homework.Lab5HW;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package lab5;
 
+/**
+ *
+ * @author pc
+ */
 public abstract class Facility {
     protected String id;
     protected String name;
@@ -22,6 +30,18 @@ public abstract class Facility {
     public void setStatuesOPERATIONAL(){
         this.status = "OPERATIONAL";
         return;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getStatus() {
+        return status;
     }
 
     public void setStatuesUNAVAILABLE(){
