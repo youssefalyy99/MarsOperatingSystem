@@ -22,13 +22,19 @@ public class Scientist extends CrewMember {
     }
 
     @Override
-    public boolean canHandle(Emergency e) {
-        return false;
-    }
-
-    @Override
     protected String getRole() {
         return "Scientist";
     }
 
+    public void conductResearch(Laboratory lab) {
+    if (!isUsable() || !lab.isOperational()) {
+        System.out.println("System Message : Scientist cannot conduct research.");
+        return;
+    }
+    setCurrentLocation(lab.name);
+    increaseFatigue(10);
+    System.out.println("System Message : Research Was Conducted Successfully :) !!.");
+    }
+
+    
 }
