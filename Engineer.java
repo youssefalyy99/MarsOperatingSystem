@@ -22,12 +22,47 @@ public class Engineer extends CrewMember {
     }
 
     @Override
-    public boolean canHandle(Emergency e) {
-        return false;
-    }
-
-    @Override
     protected String getRole() {
         return "Engineer";
+    }
+
+    public void RepairLabEquipment(Laboratory lab){
+        if(isUsable()){
+            lab.repairEquipment();
+            increaseFatigue(10);
+            setCurrentLocation("LABORATORY");
+        }else{
+            System.out.println("System Message : Engineer is CANNOT Be Used . . . ");
+        }
+    }
+
+    public void extinguishLabFire(Laboratory lab){
+        if(isUsable()){
+            lab.extinguishFire();
+            increaseFatigue(10);
+            setCurrentLocation("LABORATORY");
+        }else{
+            System.out.println("System Message : Engineer is CANNOT Be Used . . . ");
+        }
+    }
+
+    public void sealHabitatLeak(Habitat hab){
+        if(isUsable()){
+        hab.sealLeak();
+        increaseFatigue(10);
+        setCurrentLocation("HABITAT");
+        }else{
+            System.out.println("System Message : Engineer is CANNOT Be Used . . . ");
+        }
+    }
+
+    public void setLinkComm(CommunicationStation com){
+        if(isUsable()){
+            com.setLink(true);
+            increaseFatigue(10);
+            setCurrentLocation("COMMUNICATIONSTATION");
+        }else{
+            System.out.println("System Message : Engineer is CANNOT Be Used . . . ");
+        }
     }
 }
