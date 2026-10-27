@@ -1,8 +1,17 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package lab5;
 
+/**
+ *
+ * @author pc
+ */
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
+
 
 public abstract class Mission {
 
@@ -12,7 +21,8 @@ public abstract class Mission {
     private int progress;
     private MissionStatus state;
     private String failureReason;
-
+    private MissionType type;
+    
     private final ArrayList<Agent> assignedAgents;
     private final Resources resourceRequest;
 
@@ -21,7 +31,7 @@ public abstract class Mission {
     private final int minBattery;
 
     public Mission(int id, String name, int duration, Resources resourceRequest,
-            List<Facility> targetFacilities, String requiredCapability, int minBattery) {
+            List<Facility> targetFacilities, String requiredCapability, int minBattery,MissionType type) {
 
         if (duration <= 0) {
             throw new IllegalArgumentException("Duration must be greater than 0.");
@@ -29,7 +39,8 @@ public abstract class Mission {
         if (minBattery < 0) {
             throw new IllegalArgumentException("Minimum battery cannot be negative.");
         }
-
+        
+       this.type = type;
         this.id = id;
         this.name = name;
         this.duration = duration;
@@ -47,6 +58,10 @@ public abstract class Mission {
         this.state = MissionStatus.PENDING;
         this.failureReason = null;
         this.assignedAgents = new ArrayList<>();
+    }
+
+    public MissionType getType() {
+        return missionType;
     }
 
     public int getId() {
