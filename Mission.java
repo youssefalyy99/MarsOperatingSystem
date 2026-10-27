@@ -43,7 +43,6 @@ public abstract class Mission {
             this.targetFacilities = new ArrayList<>(targetFacilities);
         }
 
-        // every new mission starts the same way
         this.progress = 0;
         this.state = MissionStatus.PENDING;
         this.failureReason = null;
@@ -94,49 +93,70 @@ public abstract class Mission {
         return minBattery;
     }
 
-    public boolean assignAgent(Agent agent, List<Mission> allMissions) {
-        if (agent == null || allMissions == null) {
-            return false;
+    public boolean isActive() {
+        if (state == MissionStatus.IN_PROGRESS || state == MissionStatus.ASSIGNED) {
+            return true;
         }
-
-        if (state != MissionStatus.PENDING) {
-            return false;
-        }
-
-        if (!agent.isReady() || !agent.canPerform(this)) {
-            return false;
-        }
-
-        for (Mission m : allMissions) {
-            if (m == null || m == this) {
-                continue;
-            }
-
-            if (m.getState() == MissionStatus.ASSIGNED
-                    || m.getState() == MissionStatus.IN_PROGRESS) {
-                if (m.getAssignedAgents().contains(agent)) {
-                    return false;
-                }
-            }
-        }
-
-        if (assignedAgents.contains(agent)) {
-            return false;
-        }
-
-        assignedAgents.add(agent);
-        return true;
+        return false;
     }
 
-    public void acceptMission() {
-        if (state == MissionStatus.PENDING && !assignedAgents.isEmpty()) {
-            state = MissionStatus.ASSIGNED;
+    public boolean isFinished() {
+        if (state == MissionStatus.FAILED || state == MissionStatus.COMPLETED) {
+            return true;
+        }
+        return false;
+    }
 
-            for (Agent agent : assignedAgents) {
-                agent.setAvailability(false);
-            }
+    public void releaseAgents() {
+        for (Agent agent : assignedAgents) {
+            agent.setAvailability(true);
         }
     }
+
+    public void complete() {
+        if (state != MissionStatus.IN_PROGRESS) {
+            return;
+        }
+        state = MissionStatus.COMPLETED;
+        releaseAgents();
+    }
+
+    public boolean assignAgents(List<Agent> agents) {
+    if (state != MissionStatus.PENDING) {
+        return false;                      
+    }
+
+    if (agents == null || agents.isEmpty()) {
+        failMission("No agents were provided for this mission.");
+        return false;
+    }
+
+    
+    for (Agent agent : agents) {
+        if (agent == null) {
+            failMission("A required agent is missing.");
+            return false;
+        }
+        if (!agent.isReady()) {
+            failMission("Agent " + agent.getName() + " is not available or not in usable condition.");
+            return false;
+        }
+        if (!agent.canPerform(this)) {
+            failMission("Agent " + agent.getName() + " does not possess the required capability.");
+            return false;
+        }
+    }
+
+    
+    for (Agent agent : agents) {
+        if (!assignedAgents.contains(agent)) {   
+            assignedAgents.add(agent);
+            agent.setAvailability(false);
+        }
+    }
+    state = MissionStatus.ASSIGNED;
+    return true;
+}
 
     public void failMission(String reason) {
         if (state == MissionStatus.COMPLETED
@@ -151,9 +171,7 @@ public abstract class Mission {
         failureReason = reason;
 
         if (wasAccepted) {
-            for (Agent agent : assignedAgents) {
-                agent.setAvailability(true);
-            }
+            releaseAgents();
         }
     }
 
@@ -167,12 +185,11 @@ public abstract class Mission {
         if (state == MissionStatus.IN_PROGRESS) {
             progress++;
             if (progress >= duration) {
-                state = MissionStatus.COMPLETED;
-                for (Agent agent : assignedAgents) {
-                    agent.setAvailability(true);
-                }
+               complete();
             }
         }
-
     }
+    
+    public abstract boolean canStartIn(Environment environment);
+
 }
