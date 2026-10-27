@@ -128,20 +128,21 @@ public Boolean GetRequirments() {
         }
     }
     for (Map.Entry<String, Double> r : RequestRec.entrySet()) {
-        switch (r.getKey()) {
-            case "OXYGEN" -> oxygen -= r.getValue();
-            case "FOOD" -> food -= r.getValue();
-            case "WATER" -> water -= r.getValue();
-            case "FUEL" -> fuel -= r.getValue();
-            case "POWER" -> power -= r.getValue();
-            case "MEDICAL_SUPPLIES" -> medicalSupplies -= r.getValue();
-            case "SPARE_PARTS" -> spareParts -= r.getValue();
-        }
+        String s = r.getKey();
+        double amount = r.getValue();
+        if (s.equals("OXYGEN")) oxygen -= amount;
+        else if (s.equals("FOOD")) food -= amount;
+        else if (s.equals("WATER")) water -= amount;
+        else if (s.equals("FUEL")) fuel -= amount;
+        else if (s.equals("POWER")) power -= amount;
+        else if (s.equals("MEDICAL_SUPPLIES")) medicalSupplies -= amount;
+        else if (s.equals("SPARE_PARTS")) spareParts -= amount;
     }
     RequestRec.clear();
     System.out.println("Requirements taken successfully!");
     return true;
 }
+
 
         public void ClearRequirements() {
             RequestRec.clear();
