@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package lab5;
 
 import java.util.ArrayList;
@@ -21,7 +17,7 @@ public abstract class CrewMember extends Agent {
 
     public CrewMember(ArrayList<String> Skills, int FatigueLevel, int HealthStatus, String Name, int id, boolean availability, String currentLocation) {
         super(Name, id, availability, currentLocation);
-        this.Skills = new ArrayList<>(Skills);      // copy 3shan lw had bara el code my2darsh yghyar 
+        this.Skills = new ArrayList<>(Skills);      
         this.FatigueLevel = clamp(FatigueLevel);
         this.HealthStatus = clamp(HealthStatus);
     }
@@ -88,12 +84,31 @@ public abstract class CrewMember extends Agent {
     }
 
     @Override
-    public abstract boolean canPerform(Mission m);
+    public boolean canPerform(Mission m) {
+        if (m == null || m.getRequiredCapability() == null) {
+            return false;
+        }
+        for (String skill : Skills) {
+            if (skill.equalsIgnoreCase(m.getRequiredCapability())) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     @Override
     public abstract boolean canHandle(Emergency e);
 
     protected abstract String getRole();
+
+    @Override
+    public void update() {
+        if (!isAvailable()) {
+            increaseFatigue(2);
+        } else {
+            decreaseFatigue(1);
+        }
+    }
 
     @Override
     public String getStatusSummary() {
