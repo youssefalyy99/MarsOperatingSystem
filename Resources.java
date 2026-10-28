@@ -1,6 +1,7 @@
-package Homework.Lab5HW;
+package lab5;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 /**
  * Resources
@@ -16,15 +17,39 @@ public class Resources {
 
     private Map<String, Double> RequestRec = new HashMap<>();
 
+    public double getOxygen() {
+        return oxygen;
+    }
 
-    public double getOxygen(){return this.oxygen;}
-    public double getWater(){return this.water;}
-    public double getFood(){return this.food;}
-    public double getFuel(){return this.fuel;}
-    public double getPower(){return this.power;}
-    public double getMedicalSupplies(){return this.medicalSupplies;}
-    public double getSpareParts(){return this.spareParts;}
+    public double getWater() {
+        return water;
+    }
 
+    public double getFood() {
+        return food;
+    }
+
+    public double getFuel() {
+        return fuel;
+    }
+
+    public double getPower() {
+        return power;
+    }
+
+    public double getMedicalSupplies() {
+        return medicalSupplies;
+    }
+
+    public double getSpareParts() {
+        return spareParts;
+    }
+
+    public Map<String, Double> getRequestRec() {
+        return RequestRec;
+    }
+    
+    
     public void DisplayResources(){
         System.out.println();
         System.out.println("==========!   RESOURCES REPORT   !==========");
@@ -55,7 +80,7 @@ public class Resources {
         System.out.println("System Message : "+ s + " Amount Was Added Successfully :) !");
     }
 
-    public boolean RemoveResources(String s, double amount){
+    public void RemoveResources(String s, double amount){
         if(amount < 0){throw new IllegalArgumentException("System Message : Invalid Amount Entered . . .");}
         if(s.equals("OXYGEN") && this.oxygen >= amount){this.oxygen = this.oxygen - amount;}
         else if(s.equals("FOOD") && this.food >= amount){this.food = this.food - amount; }
@@ -68,10 +93,9 @@ public class Resources {
             System.out.println("System Message : Invalid resource type or insufficient resources . . .");
             System.out.println("System Message : Resources Available : [FOOD] [WATER] [FUEL] [OXYGEN] [POWER] [MEDICAL_SUPPLIES] [SPARE_PARTS] ");
             System.out.println();
-            return false;
+            return;
         }
         System.out.println("System Message : "+ s +" Amount Was Taken Successfully :) !");
-        return true;
     }
 
     public boolean HasAtLeast(String s , double amount){
@@ -111,38 +135,63 @@ public class Resources {
         System.out.println();
     }
 
-public Boolean GetRequirments() {
+    public Boolean GetRequirments() {
     System.out.println("==========! RESOURCES AFTER TRANSACTION !==========");
-    System.out.println("DISCLAIMER: THESE ARE NOT FINAL VALUES YET . . .");
-    Map<String, Double> resources = Map.of(
-        "OXYGEN", oxygen, "FOOD", food, "WATER", water,
-        "FUEL", fuel, "POWER", power,
-        "MEDICAL_SUPPLIES", medicalSupplies, "SPARE_PARTS", spareParts
-    );
-    for (Map.Entry<String, Double> r : RequestRec.entrySet()) {
-        double remaining = resources.get(r.getKey()) - r.getValue();
-        System.out.println(">>> " + r.getKey() + ": " + remaining);
-        if (remaining < 0) {
-            System.out.println("Insufficient resources!");
+    System.out.println("DISCLAMER : THESE ARE NOT FINAL VALUES YET . . .");
+    Scanner input = new Scanner(System.in);
+    int CanProceed = 1;
+    String get = "N";
+
+    for (Map.Entry<String, Double> request : RequestRec.entrySet()) {
+        String resource = request.getKey();
+        double amount = request.getValue();
+        double remaining = 0;
+        if (resource.equals("OXYGEN")) remaining = this.oxygen - amount;
+        else if (resource.equals("FOOD")) remaining = this.food - amount;
+        else if (resource.equals("WATER")) remaining = this.water - amount;
+        else if (resource.equals("FUEL")) remaining = this.fuel - amount;
+        else if (resource.equals("POWER")) remaining = this.power - amount;
+        else if (resource.equals("MEDICAL_SUPPLIES")) remaining = this.medicalSupplies - amount;
+        else if (resource.equals("SPARE_PARTS")) remaining = this.spareParts - amount;
+        System.out.println(">>> " + resource + ": " + remaining);
+        if(remaining < 0){CanProceed = 0;}
+    }
+
+    if(CanProceed == 0){
+        System.out.println("System Message : Cannot Proceed With Current Requirments . . .");
+        System.out.println("System Message : Please Update The Requirments Needed . . .");
+        System.out.println();
+        return false;
+    }else{
+        System.out.println("System Message: ARE YOU SURE YOU WANT TO PROCEED? (Y/N)");
+        get = input.nextLine();
+        if(get.equals("N")){
+            System.out.println("System Message: Requirments Is Put On Hold . . .");
+            System.out.println();
+            return false;
+        }else if(get.equals("Y")){
+                    for (Map.Entry<String, Double> request : RequestRec.entrySet()) {
+                    String resource = request.getKey();
+                    double amount = request.getValue();
+                    if (resource.equals("OXYGEN")){this.oxygen = this.oxygen - amount;}
+                    else if (resource.equals("FOOD")){this.food = this.food - amount;}
+                    else if (resource.equals("WATER")){this.water = this.water - amount; }
+                    else if (resource.equals("FUEL")){ this.fuel = this.fuel - amount;}
+                    else if (resource.equals("POWER")){this.power = this.power - amount;}
+                    else if (resource.equals("MEDICAL_SUPPLIES")){this.medicalSupplies = this.medicalSupplies - amount;}
+                    else if (resource.equals("SPARE_PARTS")){ this.spareParts = this.spareParts - amount; }
+                }
+                System.out.println("System Message: Requirments Are Taken Successfully :) !");
+                System.out.println();
+                RequestRec.clear();
+                return true;
+        }else{
+            System.out.println("System Message: Invalid Input - Please Enter [Y] Or [N] . . .");
+            System.out.println();
             return false;
         }
     }
-    for (Map.Entry<String, Double> r : RequestRec.entrySet()) {
-        String s = r.getKey();
-        double amount = r.getValue();
-        if (s.equals("OXYGEN")) oxygen -= amount;
-        else if (s.equals("FOOD")) food -= amount;
-        else if (s.equals("WATER")) water -= amount;
-        else if (s.equals("FUEL")) fuel -= amount;
-        else if (s.equals("POWER")) power -= amount;
-        else if (s.equals("MEDICAL_SUPPLIES")) medicalSupplies -= amount;
-        else if (s.equals("SPARE_PARTS")) spareParts -= amount;
-    }
-    RequestRec.clear();
-    System.out.println("Requirements taken successfully!");
-    return true;
 }
-
 
         public void ClearRequirements() {
             RequestRec.clear();
@@ -157,24 +206,4 @@ public Boolean GetRequirments() {
             System.out.println("System Message : Oxygen: " + this.oxygen + " Units  . . .");
             return this.oxygen;
         }
-
-
-        // Wala a belal 7ot dy fy el Colony 3la4an t7sb kol el resorces
-//public double GetColonyTotal(String type) {
-//double total = 0;
-//     for (Facility f : facilities) {
-//         if (f.isOperational()) {
-//             if (type.equals("OXYGEN")) total += f.getResources().getOxygen();
-//             else if (type.equals("WATER")) total += f.getResources().getWater();
-//             else if (type.equals("FOOD")) total += f.getResources().getFood();
-//             else if (type.equals("FUEL")) total += f.getResources().getFuel();
-//             else if (type.equals("POWER")) total += f.getResources().getPower();
-//             else if (type.equals("MEDICAL_SUPPLIES")) total += f.getResources().getMedicalSupplies();
-//             else if (type.equals("SPARE_PARTS")) total += f.getResources().getSpareParts();
-//         }
-//     }
-//     return total;
-// }
-
-
 }
