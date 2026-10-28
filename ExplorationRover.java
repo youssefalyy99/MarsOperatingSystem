@@ -1,30 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package lab5;
 
-/**
- *
- * @author pc
- */
+import java.util.ArrayList;
+import java.util.List;
+
 public class ExplorationRover extends Robot {
-    private final int carryCapacity;
+
     private static final int DRAIN_RATE = 5;
+
+    private final int carryCapacity;
     private final List<Equipment> equipment;
+
     public ExplorationRover(String name, int id, String currentLocation, int carryCapacity) {
-    super(name, id, currentLocation, DRAIN_RATE);
-    this.carryCapacity = carryCapacity;
-    this.equipment = new ArrayList<>();
-}
+        super(name, id, currentLocation, DRAIN_RATE);
+        this.carryCapacity = carryCapacity;
+        this.equipment = new ArrayList<>();
+    }
 
     public int getCarryCapacity() {
         return carryCapacity;
     }
 
     public List<Equipment> getEquipment() {
-        return equipment;
+        return new ArrayList<>(equipment);   
     }
+
     public boolean loadEquipment(Equipment e) {
         if (e == null || equipment.size() >= carryCapacity) {
             return false;
@@ -55,29 +54,27 @@ public class ExplorationRover extends Robot {
         return true;
     }
 
-
     public void explore(String region) {
         setCurrentLocation("SURFACE");
         System.out.println(getName() + " is exploring " + region + ".");
     }
 
-  
+    // a broken-down rover stays where it broke down 
     public void breakDown() {
         damage();
         System.out.println(getName() + " has broken down at " + getCurrentLocation() + ".");
     }
-
-  
 
     @Override
     public boolean canPerform(Mission m) {
         if (m == null || !isUsable()) {
             return false;
         }
-        if (m.getType() != MissionType.EXPLORATION) {
+        MissionType t = m.getType();
+        if (t != MissionType.EXPLORATION && t != MissionType.RESCUE) {
             return false;
         }
-        if (!hasEnoughBattery(m.getDuration() * DRAIN_RATE)) {
+        if (!hasEnoughBattery(m.getMinBattery())) {
             return false;
         }
         return hasAllRequired(m.getRequiredEquipment());
@@ -85,7 +82,7 @@ public class ExplorationRover extends Robot {
 
     @Override
     public boolean canHandle(Emergency e) {
-        return false;  
+        return false;   //  rovers do not respond to emergencies
     }
 
     @Override
@@ -95,6 +92,6 @@ public class ExplorationRover extends Robot {
 
     @Override
     public String getStatusSummary() {
-        return super.getStatusSummary()+ " | Equipment: " + equipment.size() + "/" + carryCapacity;
+        return super.getStatusSummary() + " | Equipment: " + equipment.size() + "/" + carryCapacity;
     }
 }
