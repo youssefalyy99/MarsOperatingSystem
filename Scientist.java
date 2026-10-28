@@ -1,15 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package lab5;
 
 import java.util.ArrayList;
 
-/**
- *
- * @author Mega Store
- */
 public class Scientist extends CrewMember {
 
     public Scientist(ArrayList<String> Skills, int FatigueLevel, int HealthStatus, String Name, int id, boolean availability, String currentLocation) {
@@ -17,7 +9,7 @@ public class Scientist extends CrewMember {
     }
 
     @Override
-    public boolean canPerform(Mission m) {
+    public boolean canHandle(Emergency e) {
         return false;
     }
 
@@ -26,15 +18,8 @@ public class Scientist extends CrewMember {
         return "Scientist";
     }
 
-    public void conductResearch(Laboratory lab) {
-    if (!isUsable() || !lab.isOperational()) {
-        System.out.println("System Message : Scientist cannot conduct research.");
-        return;
+    @Override
+    public void update() {
+        super.update();
     }
-    setCurrentLocation(lab.name);
-    increaseFatigue(10);
-    System.out.println("System Message : Research Was Conducted Successfully :) !!.");
-    }
-
-    
 }
