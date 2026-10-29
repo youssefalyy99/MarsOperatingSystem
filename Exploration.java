@@ -1,4 +1,3 @@
-
 package lab5;
 
 import java.util.ArrayList;
@@ -13,14 +12,12 @@ public class Exploration extends Mission {
     public Exploration(int id, String name, int duration,
                        Resources resourceRequest,
                        List<Facility> targetFacilities,
-                       String requiredCapability,
                        int minBattery,
                        String region,
                        List<EquipmentType> requiredEquipment) {
 
-        super(id, name, duration, resourceRequest,
-              targetFacilities, requiredCapability,
-              minBattery, MissionType.EXPLORATION);
+        super(id, name, MissionType.EXPLORATION, duration,
+              resourceRequest, targetFacilities, minBattery);
 
         if (region == null || region.trim().isEmpty()) {
             throw new IllegalArgumentException(
@@ -42,6 +39,7 @@ public class Exploration extends Mission {
         return region;
     }
 
+    @Override
     public List<EquipmentType> getRequiredEquipment() {
         return Collections.unmodifiableList(requiredEquipment);
     }
